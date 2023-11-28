@@ -1,0 +1,49 @@
+Background, Current Uses, Further Applications
+
+Sources Sites
+
+ORGANIZATION AND MAINTENANCE OF LARGE ORDERED INDICES (the paper from 1970):
+https://infolab.usc.edu/csci585/Spring2010/den_ar/indexing.pdf
+Google Code Archive:
+https://code.google.com/archive/p/cpp-btree/
+CPM 2013:
+https://algo2.iti.kit.edu/cpm2013/
+https://vimeo.com/73481096 (specifically 16 minutes in)
+B-Tree Implementation:
+https://www.geeksforgeeks.org/b-trees-implementation-in-c/#
+Linux Maple Trees:
+https://lwn.net/Articles/845507/
+Pros and Cons:
+https://www.speedb.io/blog-posts/02-lsm-vs-b-tree-v2
+General Understanding:
+https://www.linkedin.com/pulse/deep-understanding-b-tree-indexing-sohel-rana/
+
+Introduction:
+
+B-Trees are self-balacing search tree data-structure.
+This tree maintains O(log n) time on Search, Insert, and Delete for Best, Worst, and Average test case.
+B-Trees are similar in concept to Binary search trees but instead allows for parent nodes to have more children nodes making it better suited for databases.
+
+History:
+
+Developed by Rudolf Bayer and Edward McCreight while they were working for Boeing Research Labs .
+They were attempting to create a more effiecent way to organize index pages for large random-access files.
+They co-authored a paper about larged ordered indices, since they are been under the impression that indices could contain more data so that less could be stored directly in the main memory that came out in 1970.
+Most importantly, they named this new tree sytem, B-Trees.  When asked about its meaning at the 24th Annual Symposium on Combinatorial Pattern Maching in 2013, McCreight answered "you just have no idea what a lunchtime conversation can turn into."
+In summary, he stated that the B doesn't have a specfic meaning, B could mean Boeing (where they worked), Bayer (senior author), Balance (tree's job), but to McCreight, he jokingly believes "the more you think about what the B in B-trees means, the better you understand B-trees."
+
+Current and Future Uses:
+
+In 2011, Google's Developer team adapted B-Tree to C++ and had several advatanges.
+In a code archive post, it states that there was significant memory savings, improved cache behavior causing possibly significant speedup, typically less pointers per entry, and that B-Tree containers invalidate all outstanding iterators within that container, all when compared to Red-Black trees which we have learned.
+B-Trees are typicalled used for secondary storage because of their inherit ability to maintain a low disk search amount, allowing for storage to last longer.
+The comparison to Red-Black trees was done because they are similar structures and typically are run parallel.
+Additionally, B-Trees lead to the development of Maple trees, a form of B-tree used to lower lock contention in virual memory for Linux systems.
+And of course, B-Trees are used in databases with larger volumes of information to be stored.  It is a consistent time complexity, typically quicker that similar structures, and maximizes storage life.
+B-Trees are best suited for evenly balanced read and writes for data and as well for data that can be accessed in smaller randomized chunks of data.
+
+Shortcomings of B-Trees:
+
+B-Trees need more overhead to allow for fragmentation, as data will be seperated during the balancing process for system storage.
+Not the fastest storage system and can have scaling issues.
+
