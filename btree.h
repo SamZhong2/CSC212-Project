@@ -4,6 +4,9 @@
 
 class BTree {
 	private:
+		BTreeNode* root;
+    		//Minimum
+		int t;
 	public:
 		BTree();
 		void insert(const std::string& key);
