@@ -1,27 +1,31 @@
 #pragma once
-
 #include <iostream>
 #include <vector>
 #include <string>
 
-struct BTreeNode {
-    std::vector<std::string> keys;
-    std::vector<BTreeNode*> children;
-    bool isLeaf;
+template <typename T>
+struct Node {
+	private:
+		std::vector<T> keys;
+		std::vector<Node*> children;
+		bool isLeaf;
+	public:
+    	Node(bool _isLeaf);
+		~Node();
 
-    BTreeNode(bool _isLeaf);
-
-    // Function to traverse the tree
-    void traverse();
+    	// Function to traverse the tree
+    	void traverse();
 };
 
+template <typename T>
 class BTree {
 	private:
-        BTreeNode* root;
+        Node<T>* root;
         int t;
 	public:
 		BTree();
-		void insert(const std::string& key);
-		void search(const std::string& key);
+		~BTree();
+		void insert(const T& key);
+		void search(const T& key);
 		void display();
 };
