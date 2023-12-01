@@ -92,6 +92,36 @@ void BTree::search(const std::string& key) {
     }
 }
 
+void BTree::open(const std::string &key) {
+    BTreeNode* current = root;
+    int count = 0;
+
+    while (current) {
+        int i = current->findKeyIndex(key);
+
+        if (i < current->keys.size() && key == current->keys[i]) {
+            count += current->counts[i];
+            break;
+        }
+
+        if (current->is_leaf) {
+            break;
+        }
+
+        current = current->children[i];
+    }
+
+    if (count > 0) {
+        std::cout << "-------------------------" << std::endl;
+        std::cout << "File Successfully Opened " << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    } else {
+        std::cout << "-------------------------" << std::endl;
+        std::cout << "File not found" << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+}
+
 void BTree::generateDotFile(const std::string& filename) {
     std::ofstream dotFile(filename);
     if (!dotFile.is_open()) {
