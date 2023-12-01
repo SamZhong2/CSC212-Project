@@ -7,7 +7,22 @@ BTree::BTree(){
 }
 
 void BTree::splitChild(BTreeNode* parent, int index) {
+    BTreeNode* new_child = new BTreeNode(true);
+    BTreeNode* old_child = parent->children[index];
+    parent->keys.insert(parent->keys.begin() + index, old_child->keys[t - 1]);
+    parent->counts.insert(parent->counts.begin() + index, old_child->counts[t - 1]);
+    parent->children.insert(parent->children.begin() + index + 1, new_child);
 
+    new_child->keys.assign(old_child->keys.begin() + t, old_child->keys.end());
+    old_child->keys.resize(t - 1);
+
+    new_child->counts.assign(old_child->counts.begin() + t, old_child->counts.end());
+    old_child->counts.resize(t - 1);
+
+    if (!old_child->is_leaf) {
+        new_child->children.assign(old_child->children.begin() + t, old_child->children.end());
+        old_child->children.resize(t);
+    }
 }
 
 void BTree::insertNonFull(BTreeNode* node, const std::string& key) {
