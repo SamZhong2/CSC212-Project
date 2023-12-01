@@ -1,55 +1,25 @@
 #include "btree.h"
 
-/*
-	Class Constructors
-*/
-
-template <typename T>
-Node<T>::Node(bool _isLeaf) {
-	isLeaf = _isLeaf;
+BTree::BTree(){
+    this->root = nullptr;
 }
-template <typename T>
-Node<T>::~Node() {
+
+void BTree::splitChild(BTreeNode* parent, int index) {
 
 }
 
-template <typename T>
-BTree<T>::BTree() {
-	t = 3;
-}
-template <typename T>
-BTree<T>::BTree(int _t) {
-	t = _t;
-}
-template <typename T>
-BTree<T>::~BTree() {
+void BTree::insertNonFull(BTreeNode* node, const std::string& key) {
 
 }
 
-/*
-	Private Functions
-*/
-
-/*
-	Public Functions
-*/
-
-template <typename T>
-void Node<T>::traverse() {
+void BTree::insert(const std::string& key) {
 
 }
 
-template <typename T>
-void BTree<T>::insert(T key) {
-	std::cout << key << std::endl;
+void BTree::search(const std::string& key) {
+
 }
 
-template <typename T>
-void BTree<T>::search(T key) {
-	
-}
-
-template <typename T>
-void BTree<T>::display() {
+void BTree::generateDotFile(const std::string& filename) {
 
 }
