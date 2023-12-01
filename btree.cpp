@@ -66,9 +66,71 @@ void BTree::insert(const std::string& key) {
 }
 
 void BTree::search(const std::string& key) {
+    BTreeNode* current = root;
+    int count = 0;
 
+    while (current) {
+        int i = current->findKeyIndex(key);
+
+        if (i < current->keys.size() && key == current->keys[i]) {
+            count += current->counts[i];
+            break;
+        }
+
+        if (current->is_leaf) {
+            break;
+        }
+
+        current = current->children[i];
+    }
+
+    if (count > 0) {
+        std::cout << "Word found with count: " << count << std::endl;
+    } else {
+        std::cout << "Word not found" << std::endl;
+    }
 }
 
 void BTree::generateDotFile(const std::string& filename) {
+    std::ofstream dotFile(filename);
+    if (!dotFile.is_open()) {
+        std::cerr << "Error opening DOT file." << std::endl;
+        return;
+    }
 
+    dotFile << "digraph BTree {\n";
+    dotFile << "node [shape=record];\n";
+
+    std::vector<BTreeNode*> nodes;
+    std::vector<std::string> labels;
+
+    nodes.push_back(root);
+    labels.push_back("");
+
+    for (int i = 0; i < nodes.size(); i++) {
+        BTreeNode* current = nodes[i];
+        dotFile << "node" << i << " [label=\"";
+        for (int j = 0; j < current->keys.size(); j++) {
+            dotFile << "<f" << j << "> " << current->keys[j];
+            if (j < current->keys.size() - 1) {
+                dotFile << " | ";
+            }
+        }
+        dotFile << "\"];\n";
+
+        for (int j = 0; j < current->children.size(); j++) {
+            nodes.push_back(current->children[j]);
+            labels.push_back("f" + std::to_string(j));
+        }
+    }
+
+    for (int i = 0; i < nodes.size(); i++) {
+        BTreeNode* current = nodes[i];
+        for (int j = 0; j < current->children.size(); j++) {
+            dotFile << "node" << i << ":f" << j << " -> node" << labels[i + 1 + j] << ";\n";
+        }
+    }
+
+    dotFile << "}\n";
+    dotFile.close();
 }
