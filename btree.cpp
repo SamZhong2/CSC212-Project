@@ -1,5 +1,7 @@
 #include "btree.h"
 
+const int t = 2;
+
 BTree::BTree(){
     this->root = nullptr;
 }
@@ -9,7 +11,7 @@ void BTree::splitChild(BTreeNode* parent, int index) {
 }
 
 void BTree::insertNonFull(BTreeNode* node, const std::string& key) {
-
+    
 }
 
 void BTree::insert(const std::string& key) {
