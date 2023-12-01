@@ -21,11 +21,14 @@ template <typename T>
 class BTree {
 	private:
         Node<T>* root;
-        int t;
+        int t; // t being the degree.
 	public:
 		BTree();
+		BTree(int _t);
 		~BTree();
-		void insert(const T& key);
-		void search(const T& key);
+		
+		void insert(T key);
+		void search(T key);
+		void remove(T key);
 		void display();
 };
