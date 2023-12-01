@@ -3,32 +3,33 @@
 #include <vector>
 #include <string>
 
-template <typename T>
-struct Node {
-	private:
-		std::vector<T> keys;
-		std::vector<Node*> children;
-		bool isLeaf;
-	public:
-    	Node(bool _isLeaf);
-		~Node();
+class BTreeNode {
+public:
+    bool is_leaf;
+    std::vector<std::string> keys;
+    std::vector<int> counts;
+    std::vector<BTreeNode*> children;
 
-    	// Function to traverse the tree
-    	void traverse();
+    BTreeNode(bool leaf = true) {
+        this->is_leaf = leaf;
+    }
+
+    int findKeyIndex(const std::string& key) {
+        return std::distance(keys.begin(), std::lower_bound(keys.begin(), keys.end(), key));
+    }
 };
 
-template <typename T>
 class BTree {
-	private:
-        Node<T>* root;
-        int t; // t being the degree.
-	public:
-		BTree();
-		BTree(int _t);
-		~BTree();
-		
-		void insert(T key);
-		void search(T key);
-		void remove(T key);
-		void display();
+private:
+    BTreeNode* root;
+
+    void splitChild(BTreeNode* parent, int index);
+    void insertNonFull(BTreeNode* node, const std::string& key);
+
+public:
+    BTree();
+
+    void insert(const std::string& key);
+    void search(const std::string& key);
+    void generateDotFile(const std::string& filename);
 };
