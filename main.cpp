@@ -1,12 +1,26 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <string>
 #include "btree.h"
 
-int main() {
-    BTree btree;
+// Inputs...       2           3
+// ./btree [input_file.txt] [degree]
 
-    std::ifstream inputFile("test_1.txt");
+int main(int argc, char*argv[]) {
+
+    // Initialize the BTree...
+    BTree btree;
+    if (argc > 2) {
+        btree = BTree(std::stoi(argv[2]));
+    }
+    // Get the filename...
+    std::string filename = "test_1.txt";
+    if (argc > 1) {
+        filename = argv[1];
+    }
+
+    std::ifstream inputFile(filename);
     if (!inputFile.is_open()) {
         std::cerr << "Error opening input file." << std::endl;
         return 1;

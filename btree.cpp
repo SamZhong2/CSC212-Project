@@ -1,28 +1,32 @@
 #include "btree.h"
 #include <fstream>
 
-const int t = 2;
-
 BTree::BTree(){
     this->root = nullptr;
+    this->degree = 2;
+}
+
+BTree::BTree(int _degree){
+    this->root = nullptr;
+    this->degree = _degree;
 }
 
 void BTree::splitChild(BTreeNode* parent, int index) {
     BTreeNode* new_child = new BTreeNode(true);
     BTreeNode* old_child = parent->children[index];
-    parent->keys.insert(parent->keys.begin() + index, old_child->keys[t - 1]);
-    parent->counts.insert(parent->counts.begin() + index, old_child->counts[t - 1]);
+    parent->keys.insert(parent->keys.begin() + index, old_child->keys[degree - 1]);
+    parent->counts.insert(parent->counts.begin() + index, old_child->counts[degree - 1]);
     parent->children.insert(parent->children.begin() + index + 1, new_child);
 
-    new_child->keys.assign(old_child->keys.begin() + t, old_child->keys.end());
-    old_child->keys.resize(t - 1);
+    new_child->keys.assign(old_child->keys.begin() + degree, old_child->keys.end());
+    old_child->keys.resize(degree - 1);
 
-    new_child->counts.assign(old_child->counts.begin() + t, old_child->counts.end());
-    old_child->counts.resize(t - 1);
+    new_child->counts.assign(old_child->counts.begin() + degree, old_child->counts.end());
+    old_child->counts.resize(degree - 1);
 
     if (!old_child->is_leaf) {
-        new_child->children.assign(old_child->children.begin() + t, old_child->children.end());
-        old_child->children.resize(t);
+        new_child->children.assign(old_child->children.begin() + degree, old_child->children.end());
+        old_child->children.resize(degree);
     }
 }
 
@@ -41,7 +45,7 @@ void BTree::insertNonFull(BTreeNode* node, const std::string& key) {
         }
 
         i++;
-        if (node->children[i]->keys.size() == (2 * t - 1)) {
+        if (node->children[i]->keys.size() == (2 * degree - 1)) {
             splitChild(node, i);
             if (key > node->keys[i])
                 i++;
@@ -56,7 +60,7 @@ void BTree::insert(const std::string& key) {
         root->keys.push_back(key);
         root->counts.push_back(1);
     } else {
-        if (root->keys.size() == (2 * t - 1)) {
+        if (root->keys.size() == (2 * degree - 1)) {
             BTreeNode* new_root = new BTreeNode(false);
             new_root->children.push_back(root);
             splitChild(new_root, 0);

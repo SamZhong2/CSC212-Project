@@ -21,12 +21,14 @@ public:
 class BTree {
 private:
     BTreeNode* root;
+    int degree;
 
     void splitChild(BTreeNode* parent, int index);
     void insertNonFull(BTreeNode* node, const std::string& key);
 
 public:
     BTree();
+    BTree(int _degree);
 
     void insert(const std::string& key);
     void open(const std::string& key);
