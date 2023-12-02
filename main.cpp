@@ -37,6 +37,7 @@ int main(int argc, char*argv[]) {
     std::cout << "Enter a word to search: ";
     std::cin >> searchWord;
     int count = btree.search(searchWord);
+    std::cout << "Found the word \"" << searchWord << "\" a total of " << count << " times." << std::endl;
 
     btree.generateDotFile("btree.dot");
 

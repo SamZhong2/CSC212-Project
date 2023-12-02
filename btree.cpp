@@ -96,6 +96,27 @@ int BTree::search(std::string& key) {
 }
 
 void BTree::searchHelper(BTreeNode* node, std::string& key, int& count) {
+    // Look through each key in node.
+    for (int i=0; i < node->keys.size(); i++) {
+        if (key < node->keys[i]) break;
+        if (key == node->keys[i]) count=count+1;
+    }
+
+    // Check if there are no children.
+    if (node->is_leaf == true) return;
+
+    // Place before the first child.
+    if (key <= node->keys[0])
+        searchHelper(node->children[0], key, count);
+    // Place inbetween two keys in the node.
+    for (int i=1; i < node->children.size()-1; i++) {
+        if (key >= node->keys[i-1] && key <= node->keys[i]) {
+            searchHelper(node->children[i], key, count);
+        }
+    }
+    // place after the last child
+    if (key >= node->keys[node->keys.size()-1])
+        searchHelper(node->children[node->children.size()-1], key, count);
 
 }
 
