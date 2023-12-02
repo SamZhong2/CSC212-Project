@@ -3,35 +3,35 @@
 #include <string>
 
 class BTreeNode {
-public:
-    bool is_leaf;
-    std::vector<std::string> keys;
-    std::vector<int> counts;
-    std::vector<BTreeNode*> children;
+    private:
+        bool is_leaf;
+        std::vector<std::string> keys;
+        std::vector<int> counts;
+        std::vector<BTreeNode*> children;
+        friend class BTree;
 
-    BTreeNode(bool leaf = true) {
-        this->is_leaf = leaf;
-    }
+    public:
+        BTreeNode();
+        BTreeNode(bool leaf);
 
-    int findKeyIndex(const std::string& key) {
-        return std::distance(keys.begin(), std::lower_bound(keys.begin(), keys.end(), key));
-    }
+        int findKeyIndex(const std::string& key);
 };
 
 class BTree {
-private:
-    BTreeNode* root;
-    int degree;
+    private:
+        BTreeNode* root;
+        int degree;
 
-    void splitChild(BTreeNode* parent, int index);
-    void insertNonFull(BTreeNode* node, const std::string& key);
+        void splitChild(BTreeNode* parent, int index);
+        void insertNonFull(BTreeNode* node, const std::string& key);
+        void dotFileHelper(BTreeNode* node, std::string& nodes, std::string& arrows);
 
-public:
-    BTree();
-    BTree(int _degree);
+    public:
+        BTree();
+        BTree(int _degree);
 
-    void insert(const std::string& key);
-    void open(const std::string& key);
-    void search(const std::string& key);
-    void generateDotFile(const std::string& filename);
+        void insert(const std::string& key);
+        void open(const std::string& key);
+        void search(const std::string& key);
+        void generateDotFile(const std::string& filename);
 };

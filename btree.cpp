@@ -1,6 +1,17 @@
 #include "btree.h"
 #include <fstream>
 
+/*
+    Class Constructors
+*/
+
+BTreeNode::BTreeNode() {
+    is_leaf = true;
+}
+BTreeNode::BTreeNode(bool leaf) {
+    is_leaf = leaf;
+}
+
 BTree::BTree(){
     this->root = nullptr;
     this->degree = 2;
@@ -9,6 +20,14 @@ BTree::BTree(){
 BTree::BTree(int _degree){
     this->root = nullptr;
     this->degree = _degree;
+}
+
+/*
+    Class Functions
+*/
+
+int BTreeNode::findKeyIndex(const std::string& key) {
+    return std::distance(keys.begin(), std::lower_bound(keys.begin(), keys.end(), key));
 }
 
 void BTree::splitChild(BTreeNode* parent, int index) {
@@ -127,6 +146,7 @@ void BTree::open(const std::string &key) {
 }
 
 void BTree::generateDotFile(const std::string& filename) {
+
     std::ofstream dotFile(filename);
     if (!dotFile.is_open()) {
         std::cerr << "Error opening DOT file." << std::endl;
@@ -136,36 +156,17 @@ void BTree::generateDotFile(const std::string& filename) {
     dotFile << "digraph BTree {\n";
     dotFile << "node [shape=record];\n";
 
-    std::vector<BTreeNode*> nodes;
-    std::vector<std::string> labels;
+    std::string nodes;
+    std::string arrows;
 
-    nodes.push_back(root);
-    labels.push_back("");
-
-    for (int i = 0; i < nodes.size(); i++) {
-        BTreeNode* current = nodes[i];
-        dotFile << "node" << i << " [label=\"";
-        for (int j = 0; j < current->keys.size(); j++) {
-            dotFile << "<f" << j << "> " << current->keys[j];
-            if (j < current->keys.size() - 1) {
-                dotFile << " | ";
-            }
-        }
-        dotFile << "\"];\n";
-
-        for (int j = 0; j < current->children.size(); j++) {
-            nodes.push_back(current->children[j]);
-            labels.push_back("f" + std::to_string(j));
-        }
-    }
-
-    for (int i = 0; i < nodes.size(); i++) {
-        BTreeNode* current = nodes[i];
-        for (int j = 0; j < current->children.size(); j++) {
-            dotFile << "node" << i << ":f" << j << " -> node" << labels[i + 1 + j] << ";\n";
-        }
-    }
+    dotFile << nodes << arrows << "\n";
 
     dotFile << "}\n";
     dotFile.close();
+}
+
+void dotFileHelper(BTreeNode* node, std::string& nodes, std::string& arrows) {
+
+    
+
 }
