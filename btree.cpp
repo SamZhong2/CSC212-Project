@@ -26,7 +26,7 @@ BTree::BTree(int _degree){
     Class Functions
 */
 
-int BTreeNode::findKeyIndex(const std::string& key) {
+int BTreeNode::findKeyIndex(std::string& key) {
     return std::distance(keys.begin(), std::lower_bound(keys.begin(), keys.end(), key));
 }
 
@@ -49,7 +49,7 @@ void BTree::splitChild(BTreeNode* parent, int index) {
     }
 }
 
-void BTree::insertNonFull(BTreeNode* node, const std::string& key) {
+void BTree::insertNonFull(BTreeNode* node, std::string& key) {
     int i = node->keys.size() - 1;
 
     if (node->is_leaf) {
@@ -73,7 +73,7 @@ void BTree::insertNonFull(BTreeNode* node, const std::string& key) {
     }
 }
 
-void BTree::insert(const std::string& key) {
+void BTree::insert(std::string& key) {
     if (root == nullptr) {
         root = new BTreeNode(true);
         root->keys.push_back(key);
@@ -89,33 +89,17 @@ void BTree::insert(const std::string& key) {
     }
 }
 
-void BTree::search(const std::string& key) {
-    BTreeNode* current = root;
+int BTree::search(std::string& key) {
     int count = 0;
-
-    while (current) {
-        int i = current->findKeyIndex(key);
-
-        if (i < current->keys.size() && key == current->keys[i]) {
-            count += current->counts[i];
-            break;
-        }
-
-        if (current->is_leaf) {
-            break;
-        }
-
-        current = current->children[i];
-    }
-
-    if (count > 0) {
-        std::cout << "Word found with count: " << count << std::endl;
-    } else {
-        std::cout << "Word not found" << std::endl;
-    }
+    searchHelper(root, key, count);
+    return count;
 }
 
-void BTree::open(const std::string &key) {
+void BTree::searchHelper(BTreeNode* node, std::string& key, int& count) {
+
+}
+
+void BTree::open(std::string &key) {
     BTreeNode* current = root;
     int count = 0;
 
@@ -145,7 +129,7 @@ void BTree::open(const std::string &key) {
     }
 }
 
-void BTree::generateDotFile(const std::string& filename) {
+void BTree::generateDotFile(std::string& filename) {
 
     std::ofstream dotFile(filename);
     if (!dotFile.is_open()) {

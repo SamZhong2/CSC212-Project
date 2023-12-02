@@ -14,7 +14,7 @@ class BTreeNode {
         BTreeNode();
         BTreeNode(bool leaf);
 
-        int findKeyIndex(const std::string& key);
+        int findKeyIndex(std::string& key);
 };
 
 class BTree {
@@ -23,15 +23,16 @@ class BTree {
         int degree;
 
         void splitChild(BTreeNode* parent, int index);
-        void insertNonFull(BTreeNode* node, const std::string& key);
+        void insertNonFull(BTreeNode* node, std::string& key);
         void dotFileHelper(BTreeNode* node, int& node_count, std::string& nodes, std::string& arrows);
+        void searchHelper(BTreeNode* node, std::string& key, int& count);
 
     public:
         BTree();
         BTree(int _degree);
 
-        void insert(const std::string& key);
-        void open(const std::string& key);
-        void search(const std::string& key);
-        void generateDotFile(const std::string& filename);
+        void insert(std::string& key);
+        void open(std::string& key);
+        int search(std::string& key);
+        void generateDotFile(std::string& filename);
 };
