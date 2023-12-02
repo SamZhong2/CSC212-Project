@@ -129,7 +129,7 @@ void BTree::open(std::string &key) {
     }
 }
 
-void BTree::generateDotFile(std::string& filename) {
+void BTree::generateDotFile(std::string filename) {
 
     std::ofstream dotFile(filename);
     if (!dotFile.is_open()) {
