@@ -32,6 +32,7 @@ class BTree {
         BTree(int _degree);
 
         void insert(std::string& key);
+        void remove(std::string& key);
         void open(std::string& key);
         int search(std::string& key);
         void generateDotFile(std::string filename);

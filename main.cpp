@@ -59,6 +59,7 @@ int main(int argc, char*argv[]) {
     }
     inputFile.close();
 
+    // Use Search Function...
     std::string searchWord;
     std::cout << "Enter a word to search: ";
     std::cin >> searchWord;

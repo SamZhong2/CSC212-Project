@@ -89,6 +89,10 @@ void BTree::insert(std::string& key) {
     }
 }
 
+void BTree::remove(std::string& key) {
+    
+}
+
 int BTree::search(std::string& key) {
     int count = 0;
     searchHelper(root, key, count);
