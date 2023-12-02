@@ -159,14 +159,32 @@ void BTree::generateDotFile(const std::string& filename) {
     std::string nodes;
     std::string arrows;
 
-    dotFile << nodes << arrows << "\n";
+    // Recursively draw each node.
+    int node_count = 0;
+    dotFileHelper(root, node_count, nodes, arrows);
+
+    dotFile << nodes << arrows;
 
     dotFile << "}\n";
     dotFile.close();
 }
 
-void dotFileHelper(BTreeNode* node, std::string& nodes, std::string& arrows) {
+void BTree::dotFileHelper(BTreeNode* node, int& node_count, std::string& nodes, std::string& arrows) {
 
-    
+    // Add Node to string.
+    nodes = nodes + "    node" + std::to_string(node_count) + " [label=\"";
+    for (int i=0; i < node->keys.size(); i++) {
+        nodes = nodes + node->keys[i] + " | ";
+    }
+    nodes = nodes.substr(0, nodes.size() - 3);
+    nodes = nodes + "\"];\n";
+
+    // Add child nodes recursively and their children.
+    int parent = node_count;
+    for (int i=0; i < node->children.size(); i++) {
+        node_count++;
+        arrows = arrows + "    node" + std::to_string(parent) + " -> node" + std::to_string(node_count) + ";\n";
+        dotFileHelper(node->children[i], node_count, nodes, arrows);
+    }
 
 }

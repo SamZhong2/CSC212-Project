@@ -24,7 +24,7 @@ class BTree {
 
         void splitChild(BTreeNode* parent, int index);
         void insertNonFull(BTreeNode* node, const std::string& key);
-        void dotFileHelper(BTreeNode* node, std::string& nodes, std::string& arrows);
+        void dotFileHelper(BTreeNode* node, int& node_count, std::string& nodes, std::string& arrows);
 
     public:
         BTree();
