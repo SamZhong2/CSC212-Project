@@ -6,7 +6,6 @@ class BTreeNode {
     private:
         bool is_leaf;
         std::vector<std::string> keys;
-        std::vector<int> counts;
         std::vector<BTreeNode*> children;
         friend class BTree;
 

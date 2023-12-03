@@ -34,36 +34,37 @@ void BTree::splitChild(BTreeNode* parent, int index) {
     BTreeNode* new_child = new BTreeNode(true);
     BTreeNode* old_child = parent->children[index];
     parent->keys.insert(parent->keys.begin() + index, old_child->keys[degree - 1]);
-    parent->counts.insert(parent->counts.begin() + index, old_child->counts[degree - 1]);
     parent->children.insert(parent->children.begin() + index + 1, new_child);
 
     new_child->keys.assign(old_child->keys.begin() + degree, old_child->keys.end());
     old_child->keys.resize(degree - 1);
 
-    new_child->counts.assign(old_child->counts.begin() + degree, old_child->counts.end());
-    old_child->counts.resize(degree - 1);
-
     if (!old_child->is_leaf) {
         new_child->children.assign(old_child->children.begin() + degree, old_child->children.end());
         old_child->children.resize(degree);
     }
+
+    parent->is_leaf = false;
+
 }
 
 void BTree::insertNonFull(BTreeNode* node, std::string& key) {
+    // Start at the end of the node...
     int i = node->keys.size() - 1;
+    // Go through each key until you find a place to put the new one...
+    while (i >= 0 && key < node->keys[i]) {
+        i--;
+    }
+    i++;
 
+    // If the node is a leaf...
     if (node->is_leaf) {
-        while (i >= 0 && key < node->keys[i]) {
-            i--;
-        }
-        node->keys.insert(node->keys.begin() + i + 1, key);
-        node->counts.insert(node->counts.begin() + i + 1, 1);
-    } else {
-        while (i >= 0 && key < node->keys[i]) {
-            i--;
-        }
+        // Add the key to the node.
+        node->keys.insert(node->keys.begin() + i, key);
+        //node->children.insert(node->children.begin() + i, nullptr);
 
-        i++;
+    // The node is not a leaf...
+    } else {
         if (node->children[i]->keys.size() == (2 * degree - 1)) {
             splitChild(node, i);
             if (key > node->keys[i])
@@ -74,19 +75,21 @@ void BTree::insertNonFull(BTreeNode* node, std::string& key) {
 }
 
 void BTree::insert(std::string& key) {
+    // If there is no root...
     if (root == nullptr) {
         root = new BTreeNode(true);
         root->keys.push_back(key);
-        root->counts.push_back(1);
-    } else {
-        if (root->keys.size() == (2 * degree - 1)) {
-            BTreeNode* new_root = new BTreeNode(false);
-            new_root->children.push_back(root);
-            splitChild(new_root, 0);
-            root = new_root;
-        }
-        insertNonFull(root, key);
+        return;
     }
+    // If the root node is reaches max...
+    if (root->keys.size() == (2 * degree - 1)) {
+        BTreeNode* new_root = new BTreeNode();
+        new_root->children.push_back(root);
+        splitChild(new_root, 0);
+        root = new_root;
+    }
+    // Recursively insert the function...
+    insertNonFull(root, key);
 }
 
 void BTree::remove(std::string& key) {
@@ -124,7 +127,7 @@ void BTree::searchHelper(BTreeNode* node, std::string& key, int& count) {
 
 }
 
-void BTree::open(std::string &key) {
+/*void BTree::open(std::string &key) {
     BTreeNode* current = root;
     int count = 0;
 
@@ -152,7 +155,7 @@ void BTree::open(std::string &key) {
         std::cout << "File not found" << std::endl;
         std::cout << "-------------------------" << std::endl;
     }
-}
+}*/
 
 void BTree::generateDotFile(std::string filename) {
 
@@ -179,14 +182,15 @@ void BTree::generateDotFile(std::string filename) {
 }
 
 void BTree::dotFileHelper(BTreeNode* node, int& node_count, std::string& nodes, std::string& arrows) {
-
     // Add Node to string.
     nodes = nodes + "    node" + std::to_string(node_count) + " [label=\"";
     for (int i=0; i < node->keys.size(); i++) {
         nodes = nodes + node->keys[i] + " | ";
     }
     nodes = nodes.substr(0, nodes.size() - 3);
-    nodes = nodes + "\"];\n";
+    nodes = nodes + "\"";
+    if (node->is_leaf) nodes = nodes + " color=\"#62b362\"";
+    nodes = nodes + "];\n";
 
     // Add child nodes recursively and their children.
     int parent = node_count;
