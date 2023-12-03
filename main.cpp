@@ -35,6 +35,23 @@ void insertPortal(BTree btree){
     }
 }
 
+void removePortal(BTree btree){
+    std::cout << "Welcome to the remove portal."<<std::endl;
+    std::cout << "When finished enter 'Done'"<<std::endl;
+    std::string userRemove;
+    while(userRemove != "Done"){
+        std::cout<<"Enter :"; std::cin>>userRemove;
+        if(userRemove=="Done"){ break; }
+        if(btree.search(userRemove)==0){
+            std::cout<<userRemove<<" Does Not Exist Within the B-Tree.  Try Again"<<std::endl;
+        }
+        else{
+            btree.removeStarter(userRemove);
+            std::cout<<userRemove<<" Successfully removed."<<std::endl;
+        }
+    }
+}
+
 // Two methods of input.
 // If no command line arguments, use cin.
 // Inputs...   argv[1]       argv[2]
@@ -98,7 +115,7 @@ int main(int argc, char*argv[]) {
         std::cout<< "(Enter the number of the action would like to perform)"<<std::endl;
         std::cout<< "(1) Search for a word."<<std::endl;
         std::cout<< "(2) Insert a word."<<std::endl;
-        std::cout<< "(3) Delete a word. "<<std::endl;
+        std::cout<< "(3) Delete a word. (Beta/Unstable) "<<std::endl;
         std::cout<< "(4) Generate a .DOT file"<<std::endl;
         std::cout<< "(0) Close the program"<<std::endl;
         std::cin>>input;
@@ -107,7 +124,7 @@ int main(int argc, char*argv[]) {
         }else if(input ==2 ){
             insertPortal(btree);
         }else if (input == 3){
-
+            removePortal(btree);
         }else if (input == 4){
             genDot(btree);
         }else if (input == 0){} else{

@@ -63,7 +63,7 @@ void BTree::insertNonFull(BTreeNode* node, std::string& key) {
         // Add the key to the node.
         node->keys.insert(node->keys.begin() + i, key);
 
-    // The node is not a leaf...
+        // The node is not a leaf...
     } else {
         if (node->children[i]->keys.size() == (2 * degree - 1)) {
             splitChild(node, i);
@@ -92,8 +92,145 @@ void BTree::insert(std::string& key) {
     insertNonFull(root, key);
 }
 
-void BTree::remove(std::string& key) {
-    
+void BTree::removeStarter(std::string& key) {
+
+    // Run the actual remove function
+    remove(root, key);
+    // Check if the root is out of keys, then set the root to the child.
+    if (root->keys.empty() && !root->is_leaf) {
+        BTreeNode* newRoot = root->children[0];
+        delete root;
+        root = newRoot;
+    }
+}
+
+void BTree::remove(BTreeNode* node, std::string& key) {
+    // set the index.
+    int index = node->findKeyIndex(key);
+
+    // The key exists in this node AND the current node is a Leaf.
+    if (index < node->keys.size() && key == node->keys[index]) {
+        removeFromLeaf(node, index);
+    } else {
+        // The Key was not found in this node; continue...
+
+        // Check if the current node is root or not a leaf then go to the correct child node.
+        if (!node->is_leaf) {
+            bool lastChild = (index == node->keys.size());
+            BTreeNode* child = node->children[index];
+
+            // The child does not have the minimum keys.  Merge with a sibling to resolve.
+            if (child->keys.size() < degree) {
+                becomeOneWithChild(node, index);
+            }
+
+            // The child was merged, go to the child.
+            if (lastChild && index > node->keys.size()) {
+                index--;
+            }
+
+            // Remove the child.
+            remove(node->children[index], key);
+        } else {
+            // Not found
+            //std::cout<<"NOTHING FOUND<<std::endl;
+        }
+    }
+}
+
+void BTree::removeFromLeaf(BTreeNode* node, int index) {
+    //deletes the keys to remove from the leaf.
+    node->keys.erase(node->keys.begin() + index);
+}
+
+void BTree::borrowRight(BTreeNode* parent, int childIndex) {
+    BTreeNode* child = parent->children[childIndex];
+    BTreeNode* rightSibling = parent->children[childIndex + 1];
+
+    // Parent obtains key from right child sibling.
+    child->keys.push_back(parent->keys[childIndex]);
+    parent->keys[childIndex] = rightSibling->keys.front();
+    rightSibling->keys.erase(rightSibling->keys.begin());
+
+    // Child is not leaf, take the pointer away from the right child sibling.
+    if (!child->is_leaf) {
+        child->children.push_back(rightSibling->children.front());
+        rightSibling->children.erase(rightSibling->children.begin());
+    }
+}
+
+void BTree::mergeRight(BTreeNode* parent, int childIndex) {
+    BTreeNode *child = parent->children[childIndex];
+    BTreeNode *rightSibling = parent->children[childIndex + 1];
+
+    // Key moves from the child back to the parent.
+    child->keys.push_back(parent->keys[childIndex]);
+
+    // All keys and pointers move to the child.
+    child->keys.insert(child->keys.end(), rightSibling->keys.begin(), rightSibling->keys.end());
+    child->children.insert(child->children.end(), rightSibling->children.begin(), rightSibling->children.end());
+
+    // Delete the key and child pointer.
+    parent->keys.erase(parent->keys.begin() + childIndex);
+    parent->children.erase(parent->children.begin() + childIndex + 1);
+
+    // delete the child right sibling
+    delete rightSibling;
+}
+
+void BTree::borrowLeft(BTreeNode* parent, int childIndex) {
+    BTreeNode* child = parent->children[childIndex];
+    BTreeNode* leftSibling = parent->children[childIndex - 1];
+
+    // Parent obtains key from left child sibling.
+    child->keys.insert(child->keys.begin(), parent->keys[childIndex - 1]);
+    parent->keys[childIndex - 1] = leftSibling->keys.back();
+    leftSibling->keys.pop_back();
+
+    // Child is not leaf, take the pointer away from the left child sibling.
+    if (!child->is_leaf) {
+        child->children.insert(child->children.begin(), leftSibling->children.back());
+        leftSibling->children.pop_back();
+    }
+}
+
+void BTree::mergeLeft(BTreeNode* parent, int childIndex) {
+    BTreeNode *child = parent->children[childIndex];
+    BTreeNode *leftSibling = parent->children[childIndex - 1];
+
+    // key moves from parent to left sibling.
+    leftSibling->keys.push_back(parent->keys[childIndex - 1]);
+
+    // All keys and points are shifted to the left.
+    leftSibling->keys.insert(leftSibling->keys.end(), child->keys.begin(), child->keys.end());
+    leftSibling->children.insert(leftSibling->children.end(), child->children.begin(), child->children.end());
+
+    // Delete the key and child pointer from the parent.
+    parent->keys.erase(parent->keys.begin() + childIndex - 1);
+    parent->children.erase(parent->children.begin() + childIndex);
+
+    // delete the child.
+    delete child;
+}
+void BTree::becomeOneWithChild(BTreeNode* parent, int childIndex) {
+    BTreeNode* sibling;
+    if (childIndex > 0) {
+        sibling = parent->children[childIndex - 1];
+    } else {
+        sibling = nullptr;
+    }
+
+    // Take from left.
+    if (degree <= sibling->keys.size() && sibling) {
+        borrowLeft(parent, childIndex);
+    } else if (childIndex < parent->keys.size() && parent->children[childIndex + 1]->keys.size() >= degree) { // take from the right
+
+        borrowRight(parent, childIndex);
+    } else if (sibling) { // combine left.
+        mergeLeft(parent, childIndex);
+    } else { // combine right.
+        mergeRight(parent, childIndex);
+    }
 }
 
 int BTree::search(std::string& key) {
