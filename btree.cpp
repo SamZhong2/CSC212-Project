@@ -31,7 +31,7 @@ int BTreeNode::findKeyIndex(std::string& key) {
 }
 
 void BTree::splitChild(BTreeNode* parent, int index) {
-    BTreeNode* new_child = new BTreeNode(true);
+    BTreeNode* new_child = new BTreeNode();
     BTreeNode* old_child = parent->children[index];
     parent->keys.insert(parent->keys.begin() + index, old_child->keys[degree - 1]);
     parent->children.insert(parent->children.begin() + index + 1, new_child);
@@ -45,6 +45,7 @@ void BTree::splitChild(BTreeNode* parent, int index) {
     }
 
     parent->is_leaf = false;
+    if (new_child->children.size()) new_child->is_leaf = false;
 
 }
 
@@ -61,7 +62,6 @@ void BTree::insertNonFull(BTreeNode* node, std::string& key) {
     if (node->is_leaf) {
         // Add the key to the node.
         node->keys.insert(node->keys.begin() + i, key);
-        //node->children.insert(node->children.begin() + i, nullptr);
 
     // The node is not a leaf...
     } else {
