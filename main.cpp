@@ -2,7 +2,38 @@
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include <limits>
 #include "btree.h"
+
+// Search for a word in the tree as well as the count.
+void searchTree(BTree btree){
+    std::string searchWord;
+    std::cout << "Enter a word to search: ";
+    std::cin >> searchWord;
+    std::cout << "-----------------------" << std::endl;
+    int count = btree.search(searchWord);
+    std::cout << "Found the word \"" << searchWord << "\" a total of " << count << " time(s)." << std::endl;
+    std::cout << "-----------------------" << std::endl;
+}
+
+// Generate the Dot File.
+void genDot(BTree btree){
+    btree.generateDotFile("btree.dot");
+    std::cout << ".DOT File Generated." << std::endl;
+}
+
+// Insert more words into the tree.
+void insertPortal(BTree btree){
+    std::cout << "Welcome to the insert portal."<<std::endl;
+    std::cout << "When finished enter 'Done'"<<std::endl;
+    std::string userInsert;
+    while(userInsert != "Done"){
+        std::cout<<"Enter :"; std::cin>>userInsert;
+        if(userInsert=="Done"){ break; }
+        btree.insert(userInsert);
+        std::cout<<userInsert<<" Successfully inserted."<<std::endl;
+    }
+}
 
 // Two methods of input.
 // If no command line arguments, use cin.
@@ -21,7 +52,7 @@ int main(int argc, char*argv[]) {
     } else {
         filename = argv[1];
     }
-    
+
     // Get the degree of the tree...
     if (argc < 3) {
         while (true) {
@@ -43,7 +74,7 @@ int main(int argc, char*argv[]) {
 
     // Initialize the BTree...
     BTree btree(degree);
-    
+
     // Open the file...
     std::ifstream inputFile(filename);
     if (!inputFile.is_open()) {
@@ -59,16 +90,29 @@ int main(int argc, char*argv[]) {
     }
     inputFile.close();
 
-    // Use Search Function...
-    std::string searchWord;
-    std::cout << "Enter a word to search: ";
-    std::cin >> searchWord;
-    std::cout << "-----------------------" << std::endl;
-    int count = btree.search(searchWord);
-    std::cout << "Found the word \"" << searchWord << "\" a total of " << count << " time(s)." << std::endl;
-    std::cout << "-----------------------" << std::endl;
+    // Runs the User Menu Interface.
+    int input=9;
+    while(input != 0){
+        std::cout<< "Hello!  Welcome to the B-Tree program."<<std::endl;
+        std::cout<< "What would you like to do?"<<std::endl;
+        std::cout<< "(Enter the number of the action would like to perform)"<<std::endl;
+        std::cout<< "(1) Search for a word."<<std::endl;
+        std::cout<< "(2) Insert a word."<<std::endl;
+        std::cout<< "(3) Delete a word. "<<std::endl;
+        std::cout<< "(4) Generate a .DOT file"<<std::endl;
+        std::cout<< "(0) Close the program"<<std::endl;
+        std::cin>>input;
+        if(input == 1){
+            searchTree(btree);
+        }else if(input ==2 ){
+            insertPortal(btree);
+        }else if (input == 3){
 
-    btree.generateDotFile("btree.dot");
-
+        }else if (input == 4){
+            genDot(btree);
+        }else if (input == 0){} else{
+            std::cout<<"Incorrect Input, try again."<<std::endl;
+        }
+    }
     return 0;
 }
