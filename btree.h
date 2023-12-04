@@ -7,6 +7,7 @@ private:
     bool is_leaf;
     std::vector<std::string> keys;
     std::vector<BTreeNode*> children;
+    std::vector<int> count;
     friend class BTree;
 
 public:
@@ -25,6 +26,7 @@ private:
     void insertNonFull(BTreeNode* node, std::string& key);
     void dotFileHelper(BTreeNode* node, int& node_count, std::string& nodes, std::string& arrows);
     void searchHelper(BTreeNode* node, std::string& key, int& count);
+    bool updateCount(BTreeNode* node, std::string& key);
 
 public:
     BTree();

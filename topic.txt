@@ -10,4 +10,4 @@ Guidelines According to Professor:
 
 [x] Store the words of an input text file
 
-[ ] for the word ($node$) in the tree, a count with the number of repeats must also be stored
+[x] for the word ($node$) in the tree, a count with the number of repeats must also be stored
