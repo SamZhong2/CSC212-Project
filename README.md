@@ -13,8 +13,11 @@ The command-line arguments are as follows:
 ./btree [input file] [degree]
 ```
 ## Visualization via DOT File
-The program writes a file called `btree.dot`, which can be drawn using the VSCode Extension [Graphviz Interactive Prev](https://marketplace.visualstudio.com/items?itemName=tintinweb.graphviz-interactive-preview) or by copying and pasting the dot file to a site like [Graphviz Online](https://dreampuf.github.io/GraphvizOnline/) ([Github](https://github.com/dreampuf/GraphvizOnline)). If a node in the tree is a leaf, it will have a green-colored box. Below is an example of the visualization.
+The program writes a file called `btree.dot`, which can be drawn using the VSCode Extension [Graphviz Interactive Prev](https://marketplace.visualstudio.com/items?itemName=tintinweb.graphviz-interactive-preview) or by copying and pasting the dot file to a site like [Graphviz Online](https://dreampuf.github.io/GraphvizOnline/) ([Github](https://github.com/dreampuf/GraphvizOnline)). If a node in the tree is a leaf, it will have a green-colored box. Any items where a key is inserted multiple times will have parenthesis to the right showing how many times it has been inserted. Below is an example of the visualization.
 
 <p align="center">
 <img src="https://github.com/SamZhong2/CSC212-Project/assets/81537940/6e3a4716-6be3-4a5e-a1cf-665a78ed6593"/>
+</p>
+<p align="center">
+<img src="https://github.com/SamZhong2/CSC212-Project/assets/81537940/5af41527-74c9-4113-89d3-63f5c6a9b601"/>
 </p>
