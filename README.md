@@ -8,6 +8,10 @@ g++ -std=c++11 main.cpp btree.cpp -o btree
 ```
 ## Program Execution
 The B-Tree program can be executed with command-line arguments, or interfaced with using C++ `cin` when no arguments are provided.
+The command-line arguments are as follows:
+```
+./btree [input file] [degree]
+```
 ## Visualization via DOT File
 The program writes a file called `btree.dot`, which can be drawn using the VSCode Extension [Graphviz Interactive Prev](https://marketplace.visualstudio.com/items?itemName=tintinweb.graphviz-interactive-preview) or by copying and pasting the dot file to a site like [Graphviz Online](https://dreampuf.github.io/GraphvizOnline/) ([Github](https://github.com/dreampuf/GraphvizOnline)). If a node in the tree is a leaf, it will have a green-colored box. Below is an example of the visualization.
 
